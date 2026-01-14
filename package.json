@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@explorable-viz/fluid": "^0.11.4"
+  }
+}

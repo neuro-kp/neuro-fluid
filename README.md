@@ -14,7 +14,7 @@ Experiments in data provenance and neuro-imaging with Fluid.
 ### Initial configuration
 - `yarn install` to (re-)install Node dependencies
 - `yarn install-website article` to (re-)install example article website from `@exploreable-viz/fluid`
-- Add `dist/` and `website/` folders to `.gitignore`
+- Add `dist/` folder to `.gitignore`
 
 ### Bundling and serving website
 For arbitrary `$WEBSITE_NAME` (e.g. `article`):

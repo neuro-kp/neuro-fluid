@@ -1,5 +1,10 @@
 {
+  "license": "MIT",
   "dependencies": {
     "@explorable-viz/fluid": "^0.11.4"
+  },
+  "devDependencies": {
+    "puppeteer": "23.11.1",
+    "//": "Set Puppeteer to same version as used by Fluid or risk browser version mismatch"
   }
 }

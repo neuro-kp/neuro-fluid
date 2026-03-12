@@ -1,1 +1,1 @@
-def eeg_data : 5
+def eeg_data: loadJson("../dataset/eeg-coherence.json")

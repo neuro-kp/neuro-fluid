@@ -1,17 +1,4 @@
-{
-  "metadata": {
-    "description": "EEG Functional Connectivity between bilateral motor cortices",
-    "sensors": {
-      "level1": "C3-C4",
-      "level2": "C3+neighbors(4dir)-C4+neighbors(4dir)",
-      "level3": "C3+neighbors(8dir)-C4+neighbors(8dir)"
-    },
-    "metrics": ["coherence", "wPLI"],
-    "timepoints": 150,
-    "sampling_rate": "1 Hz",
-    "time_range": "0-149 seconds"
-  },
-  "data": [
+[
     {
       "timepoint": 0,
       "level1": {
@@ -1543,4 +1530,3 @@
         }
     }
 ]
-}

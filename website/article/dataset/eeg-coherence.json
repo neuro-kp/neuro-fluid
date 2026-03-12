@@ -1,0 +1,1546 @@
+{
+  "metadata": {
+    "description": "EEG Functional Connectivity between bilateral motor cortices",
+    "sensors": {
+      "level1": "C3-C4",
+      "level2": "C3+neighbors(4dir)-C4+neighbors(4dir)",
+      "level3": "C3+neighbors(8dir)-C4+neighbors(8dir)"
+    },
+    "metrics": ["coherence", "wPLI"],
+    "timepoints": 150,
+    "sampling_rate": "1 Hz",
+    "time_range": "0-149 seconds"
+  },
+  "data": [
+    {
+      "timepoint": 0,
+      "level1": {
+        "coherence": 0.251,
+        "wPLI": 0.032
+      },
+      "level2": {
+        "coherence": 0.248,
+        "wPLI": 0.028
+      },
+      "level3": {
+        "coherence": 0.253,
+        "wPLI": 0.035
+      }
+    },
+    {
+      "timepoint": 1,
+      "level1": {
+        "coherence": 0.249,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.252,
+        "wPLI": 0.033
+      },
+      "level3": {
+        "coherence": 0.247,
+        "wPLI": 0.029
+      }
+    },
+    {
+      "timepoint": 2,
+      "level1": {
+        "coherence": 0.253,
+        "wPLI": 0.025
+      },
+      "level2": {
+        "coherence": 0.251,
+        "wPLI": 0.031
+      },
+      "level3": {
+        "coherence": 0.255,
+        "wPLI": 0.038
+      }
+    },
+    {
+      "timepoint": 3,
+      "level1": {
+        "coherence": 0.248,
+        "wPLI": 0.036
+      },
+      "level2": {
+        "coherence": 0.247,
+        "wPLI": 0.042
+      },
+      "level3": {
+        "coherence": 0.252,
+        "wPLI": 0.027
+      }
+    },
+    {
+      "timepoint": 4,
+      "level1": {
+        "coherence": 0.252,
+        "wPLI": 0.029
+      },
+      "level2": {
+        "coherence": 0.254,
+        "wPLI": 0.035
+      },
+      "level3": {
+        "coherence": 0.249,
+        "wPLI": 0.033
+      }
+    },
+    {
+      "timepoint": 5,
+      "level1": {
+        "coherence": 0.247,
+        "wPLI": 0.044
+      },
+      "level2": {
+        "coherence": 0.245,
+        "wPLI": 0.026
+      },
+      "level3": {
+        "coherence": 0.251,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 6,
+      "level1": {
+        "coherence": 0.254,
+        "wPLI": 0.031
+      },
+      "level2": {
+        "coherence": 0.258,
+        "wPLI": 0.039
+      },
+      "level3": {
+        "coherence": 0.248,
+        "wPLI": 0.028
+      }
+    },
+    {
+      "timepoint": 7,
+      "level1": {
+        "coherence": 0.249,
+        "wPLI": 0.037
+      },
+      "level2": {
+        "coherence": 0.246,
+        "wPLI": 0.029
+      },
+      "level3": {
+        "coherence": 0.253,
+        "wPLI": 0.036
+      }
+    },
+    {
+      "timepoint": 8,
+      "level1": {
+        "coherence": 0.251,
+        "wPLI": 0.026
+      },
+      "level2": {
+        "coherence": 0.255,
+        "wPLI": 0.043
+      },
+      "level3": {
+        "coherence": 0.247,
+        "wPLI": 0.031
+      }
+    },
+    {
+      "timepoint": 9,
+      "level1": {
+        "coherence": 0.246,
+        "wPLI": 0.034
+      },
+      "level2": {
+        "coherence": 0.249,
+        "wPLI": 0.038
+      },
+      "level3": {
+        "coherence": 0.254,
+        "wPLI": 0.042
+      }
+    },
+    {
+      "timepoint": 10,
+      "level1": {
+        "coherence": 0.253,
+        "wPLI": 0.029
+      },
+      "level2": {
+        "coherence": 0.252,
+        "wPLI": 0.025
+      },
+      "level3": {
+        "coherence": 0.249,
+        "wPLI": 0.035
+      }
+    },
+    {
+      "timepoint": 11,
+      "level1": {
+        "coherence": 0.248,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.247,
+        "wPLI": 0.032
+      },
+      "level3": {
+        "coherence": 0.252,
+        "wPLI": 0.027
+      }
+    },
+    {
+      "timepoint": 12,
+      "level1": {
+        "coherence": 0.252,
+        "wPLI": 0.036
+      },
+      "level2": {
+        "coherence": 0.254,
+        "wPLI": 0.044
+      },
+      "level3": {
+        "coherence": 0.248,
+        "wPLI": 0.039
+      }
+    },
+    {
+      "timepoint": 13,
+      "level1": {
+        "coherence": 0.247,
+        "wPLI": 0.028
+      },
+      "level2": {
+        "coherence": 0.245,
+        "wPLI": 0.035
+      },
+      "level3": {
+        "coherence": 0.251,
+        "wPLI": 0.031
+      }
+    },
+    {
+      "timepoint": 14,
+      "level1": {
+        "coherence": 0.254,
+        "wPLI": 0.042
+      },
+      "level2": {
+        "coherence": 0.257,
+        "wPLI": 0.029
+      },
+      "level3": {
+        "coherence": 0.247,
+        "wPLI": 0.036
+      }
+    },
+    {
+      "timepoint": 15,
+      "level1": {
+        "coherence": 0.249,
+        "wPLI": 0.033
+      },
+      "level2": {
+        "coherence": 0.246,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.253,
+        "wPLI": 0.028
+      }
+    },
+    {
+      "timepoint": 16,
+      "level1": {
+        "coherence": 0.251,
+        "wPLI": 0.037
+      },
+      "level2": {
+        "coherence": 0.255,
+        "wPLI": 0.026
+      },
+      "level3": {
+        "coherence": 0.248,
+        "wPLI": 0.043
+      }
+    },
+    {
+      "timepoint": 17,
+      "level1": {
+        "coherence": 0.246,
+        "wPLI": 0.031
+      },
+      "level2": {
+        "coherence": 0.249,
+        "wPLI": 0.038
+      },
+      "level3": {
+        "coherence": 0.254,
+        "wPLI": 0.034
+      }
+    },
+    {
+      "timepoint": 18,
+      "level1": {
+        "coherence": 0.253,
+        "wPLI": 0.039
+      },
+      "level2": {
+        "coherence": 0.252,
+        "wPLI": 0.027
+      },
+      "level3": {
+        "coherence": 0.249,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 19,
+      "level1": {
+        "coherence": 0.248,
+        "wPLI": 0.035
+      },
+      "level2": {
+        "coherence": 0.247,
+        "wPLI": 0.043
+      },
+      "level3": {
+        "coherence": 0.252,
+        "wPLI": 0.029
+      }
+    },
+    {
+      "timepoint": 20,
+      "level1": {
+        "coherence": 0.252,
+        "wPLI": 0.028
+      },
+      "level2": {
+        "coherence": 0.254,
+        "wPLI": 0.036
+      },
+      "level3": {
+        "coherence": 0.247,
+        "wPLI": 0.042
+      }
+    },
+    {
+      "timepoint": 21,
+      "level1": {
+        "coherence": 0.247,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.245,
+        "wPLI": 0.032
+      },
+      "level3": {
+        "coherence": 0.251,
+        "wPLI": 0.037
+      }
+    },
+    {
+      "timepoint": 22,
+      "level1": {
+        "coherence": 0.254,
+        "wPLI": 0.034
+      },
+      "level2": {
+        "coherence": 0.257,
+        "wPLI": 0.039
+      },
+      "level3": {
+        "coherence": 0.248,
+        "wPLI": 0.026
+      }
+    },
+    {
+      "timepoint": 23,
+      "level1": {
+        "coherence": 0.249,
+        "wPLI": 0.029
+      },
+      "level2": {
+        "coherence": 0.246,
+        "wPLI": 0.035
+      },
+      "level3": {
+        "coherence": 0.253,
+        "wPLI": 0.043
+      }
+    },
+    {
+      "timepoint": 24,
+      "level1": {
+        "coherence": 0.251,
+        "wPLI": 0.042
+      },
+      "level2": {
+        "coherence": 0.255,
+        "wPLI": 0.031
+      },
+      "level3": {
+        "coherence": 0.249,
+        "wPLI": 0.038
+      }
+    },
+    {
+      "timepoint": 25,
+      "level1": {
+        "coherence": 0.253,
+        "wPLI": 0.027
+      },
+      "level2": {
+        "coherence": 0.252,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.248,
+        "wPLI": 0.033
+      }
+    },
+    {
+      "timepoint": 26,
+      "level1": {
+        "coherence": 0.248,
+        "wPLI": 0.036
+      },
+      "level2": {
+        "coherence": 0.247,
+        "wPLI": 0.028
+      },
+      "level3": {
+        "coherence": 0.252,
+        "wPLI": 0.044
+      }
+    },
+    {
+      "timepoint": 27,
+      "level1": {
+        "coherence": 0.252,
+        "wPLI": 0.039
+      },
+      "level2": {
+        "coherence": 0.254,
+        "wPLI": 0.034
+      },
+      "level3": {
+        "coherence": 0.247,
+        "wPLI": 0.029
+      }
+    },
+    {
+      "timepoint": 28,
+      "level1": {
+        "coherence": 0.247,
+        "wPLI": 0.031
+      },
+      "level2": {
+        "coherence": 0.245,
+        "wPLI": 0.042
+      },
+      "level3": {
+        "coherence": 0.251,
+        "wPLI": 0.037
+      }
+    },
+    {
+      "timepoint": 29,
+      "level1": {
+        "coherence": 0.254,
+        "wPLI": 0.043
+      },
+      "level2": {
+        "coherence": 0.257,
+        "wPLI": 0.029
+      },
+      "level3": {
+        "coherence": 0.249,
+        "wPLI": 0.035
+      }
+    },
+    {
+      "timepoint": 30,
+      "level1": {
+        "coherence": 0.246,
+        "wPLI": 0.032
+      },
+      "level2": {
+        "coherence": 0.247,
+        "wPLI": 0.038
+      },
+      "level3": {
+        "coherence": 0.253,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 31,
+      "level1": {
+        "coherence": 0.252,
+        "wPLI": 0.037
+      },
+      "level2": {
+        "coherence": 0.251,
+        "wPLI": 0.025
+      },
+      "level3": {
+        "coherence": 0.248,
+        "wPLI": 0.033
+      }
+    },
+    {
+      "timepoint": 32,
+      "level1": {
+        "coherence": 0.249,
+        "wPLI": 0.029
+      },
+      "level2": {
+        "coherence": 0.255,
+        "wPLI": 0.042
+      },
+      "level3": {
+        "coherence": 0.252,
+        "wPLI": 0.038
+      }
+    },
+    {
+      "timepoint": 33,
+      "level1": {
+        "coherence": 0.253,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.248,
+        "wPLI": 0.034
+      },
+      "level3": {
+        "coherence": 0.247,
+        "wPLI": 0.027
+      }
+    },
+    {
+      "timepoint": 34,
+      "level1": {
+        "coherence": 0.247,
+        "wPLI": 0.036
+      },
+      "level2": {
+        "coherence": 0.252,
+        "wPLI": 0.029
+      },
+      "level3": {
+        "coherence": 0.254,
+        "wPLI": 0.043
+      }
+    },
+    {
+      "timepoint": 35,
+      "level1": {
+        "coherence": 0.251,
+        "wPLI": 0.028
+      },
+      "level2": {
+        "coherence": 0.249,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.246,
+        "wPLI": 0.035
+      }
+    },
+    {
+      "timepoint": 36,
+      "level1": {
+        "coherence": 0.254,
+        "wPLI": 0.039
+      },
+      "level2": {
+        "coherence": 0.253,
+        "wPLI": 0.032
+      },
+      "level3": {
+        "coherence": 0.251,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 37,
+      "level1": {
+        "coherence": 0.248,
+        "wPLI": 0.033
+      },
+      "level2": {
+        "coherence": 0.247,
+        "wPLI": 0.038
+      },
+      "level3": {
+        "coherence": 0.252,
+        "wPLI": 0.029
+      }
+    },
+    {
+      "timepoint": 38,
+      "level1": {
+        "coherence": 0.252,
+        "wPLI": 0.042
+      },
+      "level2": {
+        "coherence": 0.254,
+        "wPLI": 0.036
+      },
+      "level3": {
+        "coherence": 0.248,
+        "wPLI": 0.027
+      }
+    },
+    {
+      "timepoint": 39,
+      "level1": {
+        "coherence": 0.247,
+        "wPLI": 0.031
+      },
+      "level2": {
+        "coherence": 0.245,
+        "wPLI": 0.039
+      },
+      "level3": {
+        "coherence": 0.251,
+        "wPLI": 0.044
+      }
+    },
+    {
+      "timepoint": 40,
+      "level1": {
+        "coherence": 0.254,
+        "wPLI": 0.035
+      },
+      "level2": {
+        "coherence": 0.257,
+        "wPLI": 0.028
+      },
+      "level3": {
+        "coherence": 0.249,
+        "wPLI": 0.036
+      }
+    },
+    {
+      "timepoint": 41,
+      "level1": {
+        "coherence": 0.252,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.251,
+        "wPLI": 0.037
+      },
+      "level3": {
+        "coherence": 0.247,
+        "wPLI": 0.032
+      }
+    },
+    {
+      "timepoint": 42,
+      "level1": {
+        "coherence": 0.249,
+        "wPLI": 0.026
+      },
+      "level2": {
+        "coherence": 0.255,
+        "wPLI": 0.042
+      },
+      "level3": {
+        "coherence": 0.253,
+        "wPLI": 0.039
+      }
+    },
+    {
+      "timepoint": 43,
+      "level1": {
+        "coherence": 0.253,
+        "wPLI": 0.038
+      },
+      "level2": {
+        "coherence": 0.248,
+        "wPLI": 0.033
+      },
+      "level3": {
+        "coherence": 0.246,
+        "wPLI": 0.028
+      }
+    },
+    {
+      "timepoint": 44,
+      "level1": {
+        "coherence": 0.247,
+        "wPLI": 0.029
+      },
+      "level2": {
+        "coherence": 0.252,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.254,
+        "wPLI": 0.035
+      }
+    },
+    {
+      "timepoint": 45,
+      "level1": {
+        "coherence": 0.251,
+        "wPLI": 0.043
+      },
+      "level2": {
+        "coherence": 0.249,
+        "wPLI": 0.027
+      },
+      "level3": {
+        "coherence": 0.247,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 46,
+      "level1": {
+        "coherence": 0.254,
+        "wPLI": 0.032
+      },
+      "level2": {
+        "coherence": 0.253,
+        "wPLI": 0.038
+      },
+      "level3": {
+        "coherence": 0.251,
+        "wPLI": 0.034
+      }
+    },
+    {
+      "timepoint": 47,
+      "level1": {
+        "coherence": 0.248,
+        "wPLI": 0.037
+      },
+      "level2": {
+        "coherence": 0.247,
+        "wPLI": 0.029
+      },
+      "level3": {
+        "coherence": 0.252,
+        "wPLI": 0.042
+      }
+    },
+    {
+      "timepoint": 48,
+      "level1": {
+        "coherence": 0.252,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.254,
+        "wPLI": 0.035
+      },
+      "level3": {
+        "coherence": 0.248,
+        "wPLI": 0.028
+      }
+    },
+    {
+      "timepoint": 49,
+      "level1": {
+        "coherence": 0.247,
+        "wPLI": 0.034
+      },
+      "level2": {
+        "coherence": 0.245,
+        "wPLI": 0.042
+      },
+      "level3": {
+        "coherence": 0.251,
+        "wPLI": 0.039
+      }
+    },
+    {
+      "timepoint": 50,
+      "level1": {
+        "coherence": 0.241,
+        "wPLI": 0.029
+      },
+      "level2": {
+        "coherence": 0.228,
+        "wPLI": 0.036
+      },
+      "level3": {
+        "coherence": 0.215,
+        "wPLI": 0.031
+      }
+    },
+    {
+      "timepoint": 51,
+      "level1": {
+        "coherence": 0.235,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.212,
+        "wPLI": 0.027
+      },
+      "level3": {
+        "coherence": 0.198,
+        "wPLI": 0.043
+      }
+    },
+    {
+      "timepoint": 52,
+      "level1": {
+        "coherence": 0.228,
+        "wPLI": 0.035
+      },
+      "level2": {
+        "coherence": 0.197,
+        "wPLI": 0.038
+      },
+      "level3": {
+        "coherence": 0.176,
+        "wPLI": 0.029
+      }
+    },
+    {
+      "timepoint": 53,
+      "level1": {
+        "coherence": 0.221,
+        "wPLI": 0.028
+      },
+      "level2": {
+        "coherence": 0.183,
+        "wPLI": 0.032
+      },
+      "level3": {
+        "coherence": 0.159,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 54,
+      "level1": {
+        "coherence": 0.214,
+        "wPLI": 0.042
+      },
+      "level2": {
+        "coherence": 0.171,
+        "wPLI": 0.039
+      },
+      "level3": {
+        "coherence": 0.143,
+        "wPLI": 0.034
+      }
+    },
+    {
+      "timepoint": 55,
+      "level1": {
+        "coherence": 0.207,
+        "wPLI": 0.033
+      },
+      "level2": {
+        "coherence": 0.158,
+        "wPLI": 0.028
+      },
+      "level3": {
+        "coherence": 0.128,
+        "wPLI": 0.037
+      }
+    },
+    {
+      "timepoint": 56,
+      "level1": {
+        "coherence": 0.201,
+        "wPLI": 0.037
+      },
+      "level2": {
+        "coherence": 0.146,
+        "wPLI": 0.043
+      },
+      "level3": {
+        "coherence": 0.114,
+        "wPLI": 0.026
+      }
+    },
+    {
+      "timepoint": 57,
+      "level1": {
+        "coherence": 0.194,
+        "wPLI": 0.031
+      },
+      "level2": {
+        "coherence": 0.135,
+        "wPLI": 0.035
+      },
+      "level3": {
+        "coherence": 0.102,
+        "wPLI": 0.042
+      }
+    },
+    {
+      "timepoint": 58,
+      "level1": {
+        "coherence": 0.187,
+        "wPLI": 0.039
+      },
+      "level2": {
+        "coherence": 0.124,
+        "wPLI": 0.029
+      },
+      "level3": {
+        "coherence": 0.091,
+        "wPLI": 0.033
+      }
+    },
+    {
+      "timepoint": 59,
+      "level1": {
+        "coherence": 0.181,
+        "wPLI": 0.034
+      },
+      "level2": {
+        "coherence": 0.114,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.081,
+        "wPLI": 0.038
+      }
+    },
+    {
+      "timepoint": 60,
+      "level1": {
+        "coherence": 0.175,
+        "wPLI": 0.027
+      },
+      "level2": {
+        "coherence": 0.105,
+        "wPLI": 0.036
+      },
+      "level3": {
+        "coherence": 0.072,
+        "wPLI": 0.029
+      }
+    },
+    {
+      "timepoint": 61,
+      "level1": {
+        "coherence": 0.168,
+        "wPLI": 0.042
+      },
+      "level2": {
+        "coherence": 0.096,
+        "wPLI": 0.033
+      },
+      "level3": {
+        "coherence": 0.064,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 62,
+      "level1": {
+        "coherence": 0.162,
+        "wPLI": 0.036
+      },
+      "level2": {
+        "coherence": 0.088,
+        "wPLI": 0.028
+      },
+      "level3": {
+        "coherence": 0.057,
+        "wPLI": 0.035
+      }
+    },
+    {
+      "timepoint": 63,
+      "level1": {
+        "coherence": 0.155,
+        "wPLI": 0.029
+      },
+      "level2": {
+        "coherence": 0.081,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.051,
+        "wPLI": 0.032
+      }
+    },
+    {
+      "timepoint": 64,
+      "level1": {
+        "coherence": 0.149,
+        "wPLI": 0.038
+      },
+      "level2": {
+        "coherence": 0.074,
+        "wPLI": 0.034
+      },
+      "level3": {
+        "coherence": 0.046,
+        "wPLI": 0.039
+      }
+    },
+    {
+      "timepoint": 65,
+      "level1": {
+        "coherence": 0.143,
+        "wPLI": 0.032
+      },
+      "level2": {
+        "coherence": 0.068,
+        "wPLI": 0.027
+      },
+      "level3": {
+        "coherence": 0.042,
+        "wPLI": 0.036
+      }
+    },
+    {
+      "timepoint": 66,
+      "level1": {
+        "coherence": 0.137,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.062,
+        "wPLI": 0.038
+      },
+      "level3": {
+        "coherence": 0.038,
+        "wPLI": 0.029
+      }
+    },
+    {
+      "timepoint": 67,
+      "level1": {
+        "coherence": 0.131,
+        "wPLI": 0.035
+      },
+      "level2": {
+        "coherence": 0.057,
+        "wPLI": 0.031
+      },
+      "level3": {
+        "coherence": 0.035,
+        "wPLI": 0.043
+      }
+    },
+    {
+      "timepoint": 68,
+      "level1": {
+        "coherence": 0.125,
+        "wPLI": 0.028
+      },
+      "level2": {
+        "coherence": 0.052,
+        "wPLI": 0.042
+      },
+      "level3": {
+        "coherence": 0.032,
+        "wPLI": 0.037
+      }
+    },
+    {
+      "timepoint": 69,
+      "level1": {
+        "coherence": 0.119,
+        "wPLI": 0.039
+      },
+      "level2": {
+        "coherence": 0.048,
+        "wPLI": 0.034
+      },
+      "level3": {
+        "coherence": 0.029,
+        "wPLI": 0.028
+      }
+    },
+    {
+      "timepoint": 70,
+      "level1": {
+        "coherence": 0.114,
+        "wPLI": 0.033
+      },
+      "level2": {
+        "coherence": 0.044,
+        "wPLI": 0.029
+      },
+      "level3": {
+        "coherence": 0.027,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 71,
+      "level1": {
+        "coherence": 0.119,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.049,
+        "wPLI": 0.036
+      },
+      "level3": {
+        "coherence": 0.031,
+        "wPLI": 0.032
+      }
+    },
+    {
+      "timepoint": 72,
+      "level1": {
+        "coherence": 0.124,
+        "wPLI": 0.035
+      },
+      "level2": {
+        "coherence": 0.054,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.035,
+        "wPLI": 0.038
+      }
+    },
+    {
+      "timepoint": 73,
+      "level1": {
+        "coherence": 0.129,
+        "wPLI": 0.028
+      },
+      "level2": {
+        "coherence": 0.059,
+        "wPLI": 0.033
+      },
+      "level3": {
+        "coherence": 0.039,
+        "wPLI": 0.027
+      }
+    },
+    {
+      "timepoint": 74,
+      "level1": {
+        "coherence": 0.134,
+        "wPLI": 0.037
+      },
+      "level2": {
+        "coherence": 0.064,
+        "wPLI": 0.039
+      },
+      "level3": {
+        "coherence": 0.043,
+        "wPLI": 0.034
+      }
+    },
+    {
+      "timepoint": 75,
+      "level1": {
+        "coherence": 0.139,
+        "wPLI": 0.042
+      },
+      "level2": {
+        "coherence": 0.069,
+        "wPLI": 0.029
+      },
+      "level3": {
+        "coherence": 0.047,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 76,
+      "level1": {
+        "coherence": 0.144,
+        "wPLI": 0.034
+      },
+      "level2": {
+        "coherence": 0.074,
+        "wPLI": 0.036
+      },
+      "level3": {
+        "coherence": 0.052,
+        "wPLI": 0.028
+      }
+    },
+    {
+      "timepoint": 77,
+      "level1": {
+        "coherence": 0.149,
+        "wPLI": 0.039
+      },
+      "level2": {
+        "coherence": 0.079,
+        "wPLI": 0.031
+      },
+      "level3": {
+        "coherence": 0.057,
+        "wPLI": 0.037
+      }
+    },
+    {
+      "timepoint": 78,
+      "level1": {
+        "coherence": 0.154,
+        "wPLI": 0.027
+      },
+      "level2": {
+        "coherence": 0.084,
+        "wPLI": 0.042
+      },
+      "level3": {
+        "coherence": 0.062,
+        "wPLI": 0.033
+      }
+    },
+    {
+      "timepoint": 79,
+      "level1": {
+        "coherence": 0.159,
+        "wPLI": 0.036
+      },
+      "level2": {
+        "coherence": 0.089,
+        "wPLI": 0.038
+      },
+      "level3": {
+        "coherence": 0.067,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 80,
+      "level1": {
+        "coherence": 0.182,
+        "wPLI": 0.031
+      },
+      "level2": {
+        "coherence": 0.126,
+        "wPLI": 0.035
+      },
+      "level3": {
+        "coherence": 0.108,
+        "wPLI": 0.029
+      }
+    },
+    {
+      "timepoint": 81,
+      "level1": {
+        "coherence": 0.205,
+        "wPLI": 0.039
+      },
+      "level2": {
+        "coherence": 0.167,
+        "wPLI": 0.027
+      },
+      "level3": {
+        "coherence": 0.156,
+        "wPLI": 0.036
+      }
+    },
+    {
+      "timepoint": 82,
+      "level1": {
+        "coherence": 0.228,
+        "wPLI": 0.033
+      },
+      "level2": {
+        "coherence": 0.208,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.204,
+        "wPLI": 0.042
+      }
+    },
+    {
+      "timepoint": 83,
+      "level1": {
+        "coherence": 0.251,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.249,
+        "wPLI": 0.034
+      },
+      "level3": {
+        "coherence": 0.252,
+        "wPLI": 0.028
+      }
+    },
+    {
+      "timepoint": 84,
+      "level1": {
+        "coherence": 0.274,
+        "wPLI": 0.036
+      },
+      "level2": {
+        "coherence": 0.292,
+        "wPLI": 0.039
+      },
+      "level3": {
+        "coherence": 0.307,
+        "wPLI": 0.035
+      }
+    },
+    {
+      "timepoint": 85,
+      "level1": {
+        "coherence": 0.297,
+        "wPLI": 0.028
+      },
+      "level2": {
+        "coherence": 0.335,
+        "wPLI": 0.032
+      },
+      "level3": {
+        "coherence": 0.362,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 86,
+      "level1": {
+        "coherence": 0.321,
+        "wPLI": 0.037
+      },
+      "level2": {
+        "coherence": 0.378,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.417,
+        "wPLI": 0.033
+      }
+    },
+    {
+      "timepoint": 87,
+      "level1": {
+        "coherence": 0.345,
+        "wPLI": 0.042
+      },
+      "level2": {
+        "coherence": 0.421,
+        "wPLI": 0.029
+      },
+      "level3": {
+        "coherence": 0.472,
+        "wPLI": 0.038
+      }
+    },
+    {
+      "timepoint": 88,
+      "level1": {
+        "coherence": 0.369,
+        "wPLI": 0.034
+      },
+      "level2": {
+        "coherence": 0.464,
+        "wPLI": 0.036
+      },
+      "level3": {
+        "coherence": 0.527,
+        "wPLI": 0.027
+      }
+    },
+    {
+      "timepoint": 89,
+      "level1": {
+        "coherence": 0.393,
+        "wPLI": 0.039
+      },
+      "level2": {
+        "coherence": 0.507,
+        "wPLI": 0.043
+      },
+      "level3": {
+        "coherence": 0.582,
+        "wPLI": 0.032
+      }
+    },
+    {
+      "timepoint": 90,
+      "level1": {
+        "coherence": 0.417,
+        "wPLI": 0.031
+      },
+      "level2": {
+        "coherence": 0.532,
+        "wPLI": 0.037
+      },
+      "level3": {
+        "coherence": 0.609,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 91,
+      "level1": {
+        "coherence": 0.441,
+        "wPLI": 0.038
+      },
+      "level2": {
+        "coherence": 0.557,
+        "wPLI": 0.028
+      },
+      "level3": {
+        "coherence": 0.636,
+        "wPLI": 0.035
+      }
+    },
+    {
+      "timepoint": 92,
+      "level1": {
+        "coherence": 0.465,
+        "wPLI": 0.035
+      },
+      "level2": {
+        "coherence": 0.582,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.663,
+        "wPLI": 0.029
+      }
+    },
+    {
+      "timepoint": 93,
+      "level1": {
+        "coherence": 0.478,
+        "wPLI": 0.029
+      },
+      "level2": {
+        "coherence": 0.594,
+        "wPLI": 0.034
+      },
+      "level3": {
+        "coherence": 0.672,
+        "wPLI": 0.038
+      }
+    },
+    {
+      "timepoint": 94,
+      "level1": {
+        "coherence": 0.491,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.606,
+        "wPLI": 0.039
+      },
+      "level3": {
+        "coherence": 0.681,
+        "wPLI": 0.033
+      }
+    },
+    {
+      "timepoint": 95,
+      "level1": {
+        "coherence": 0.503,
+        "wPLI": 0.036
+      },
+      "level2": {
+        "coherence": 0.618,
+        "wPLI": 0.027
+      },
+      "level3": {
+        "coherence": 0.689,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 96,
+      "level1": {
+        "coherence": 0.496,
+        "wPLI": 0.028
+      },
+      "level2": {
+        "coherence": 0.597,
+        "wPLI": 0.036
+      },
+      "level3": {
+        "coherence": 0.657,
+        "wPLI": 0.037
+      }
+    },
+    {
+      "timepoint": 97,
+      "level1": {
+        "coherence": 0.489,
+        "wPLI": 0.042
+      },
+      "level2": {
+        "coherence": 0.576,
+        "wPLI": 0.041
+      },
+      "level3": {
+        "coherence": 0.625,
+        "wPLI": 0.028
+      }
+    },
+    {
+      "timepoint": 98,
+      "level1": {
+        "coherence": 0.482,
+        "wPLI": 0.033
+      },
+      "level2": {
+        "coherence": 0.555,
+        "wPLI": 0.029
+      },
+      "level3": {
+        "coherence": 0.593,
+        "wPLI": 0.034
+      }
+    },
+    {
+      "timepoint": 99,
+      "level1": {
+        "coherence": 0.475,
+        "wPLI": 0.038
+      },
+      "level2": {
+        "coherence": 0.534,
+        "wPLI": 0.035
+      },
+      "level3": {
+        "coherence": 0.561,
+        "wPLI": 0.041
+      }
+    },
+    {
+      "timepoint": 100,
+      "level1": {
+        "coherence": 0.468,
+        "wPLI": 0.041
+      },
+      "level2": {
+        "coherence": 0.513,
+        "wPLI": 0.042
+      },
+      "level3": {
+        "coherence": 0.529,
+        "wPLI": 0.036
+      }
+    },
+    {
+      "timepoint": 101,
+      "level1": {
+        "coherence": 0.461,
+        "wPLI": 0.029
+      },
+      "level2": {
+        "coherence": 0.492,
+        "wPLI": 0.037
+      },
+      "level3": {
+        "coherence": 0.497,
+        "wPLI": 0.036
+        }
+    }
+]
+}

@@ -1,1 +1,2 @@
-"Hello World"
+import dataset.eeg_coherence_data
+length(eeg_data)

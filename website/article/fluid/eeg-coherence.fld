@@ -1,24 +1,36 @@
 import eeg_coherence_data
 
 
-def series(connectivityMetric, connectivityLevel):
-  [
-    { x: row.timepoint, y: row.conn_value }
-    for timepoint in [0 .. 9] for row in eeg_data
-    if row.timepoint == timepoint if row.conn_metric == connectivityMetric if row.conn_level == connectivityLevel
-  ]
+# def series(connectivityMetric, connectivityLevel):
+#   [
+#     { x: row.timepoint, y: row.conn_value }
+#     for timepoint in [0 .. 9] for row in eeg_data
+#     if row.timepoint == timepoint if row.conn_metric == connectivityMetric if row.conn_level == connectivityLevel
+#   ]
 
+
+# LineChart({
+#   tickLabels: { x: Default, y: Default },
+#   size: { width: 330, height: 285 },
+#   caption: "Connectivity values over time for level 1",
+#   plots: [
+#     LinePlot({
+#       name: connectivityMetric,
+#       points: zipWith(lambda p1, p2: { x: p1.x, y: p1.y / p2.y }, level1, level2)
+#     })
+#     for connectivityMetric in ["coherence", "wPLI"]
+#     for (level1, level2) in [series(connectivityMetric, "level1"), series(connectivityMetric, "level2")]
+#   ]
+# })
+
+def points:
+  [{ x: r.timepoint, y: r.conn_value } for r in eeg_data if r.conn_level == "level1" if r.conn_metric == "coherence"]
 
 LineChart({
   tickLabels: { x: Default, y: Default },
   size: { width: 330, height: 285 },
-  caption: "Connectivity values over time for level 1",
+  caption: "EEG Coherence Values between LH and RH M1",
   plots: [
-    LinePlot({
-      name: connectivityMetric,
-      points: zipWith(lambda p1, p2: { x: p1.x, y: p1.y / p2.y }, level1, level2)
-    })
-    for connectivityMetric in ["coherence", "wPLI"]
-    for (level1, level2) in [series(connectivityMetric, "level1"), series(connectivityMetric, "level2")]
+    LinePlot({ name: "Level1-Coherence", points: points })
   ]
 })

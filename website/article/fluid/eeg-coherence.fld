@@ -1,2 +1,2 @@
-import dataset.eeg_coherence_data
+import eeg_coherence_data
 eeg_data

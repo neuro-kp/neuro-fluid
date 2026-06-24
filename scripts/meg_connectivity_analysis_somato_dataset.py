@@ -7,7 +7,6 @@ This script reproduces the logic of an EEG sliding-window FC analysis using:
 - 50 ms step size (90% overlap)
 - coherence and wPLI
 - beta band: 13-30 Hz (1-Hz steps)
-- baseline correction of connectivity values
 
 For simplicity, this version uses ONE left-hemisphere and ONE right-hemisphere
 MEG gradiometer, intended as rough sensor-level proxies for left/right M1.
@@ -62,21 +61,6 @@ FMAX = 30.0
 #   'coh'  = coherence
 #   'wpli' = weighted phase lag index
 METHODS = ["coh", "wpli"]
-
-# -------------------------
-# Baseline correction
-# -------------------------
-# Baseline windows are ALL windows fully contained in [-1, 0] sec.
-# With 500 ms windows and 50 ms step, this gives 11 windows
-# (starts: -1.00, -0.95, ..., -0.50 sec).
-#
-# Available modes:
-#   "subtract" : x - mean(baseline)
-#   "ratio"    : x / mean(baseline)
-#   "percent"  : 100 * (x - mean(baseline)) / mean(baseline)
-#   "zscore"   : (x - mean(baseline)) / std(baseline)
-#   "logratio" : log10(x / mean(baseline))
-BASELINE_MODE = "subtract"
 
 # -------------------------
 # Channel selection
@@ -210,49 +194,6 @@ def make_sliding_windows(tmin, tmax, win_len, step, sfreq, n_times):
     return windows
 
 
-def baseline_indices_from_windows(windows, baseline_tmin=-1.0, baseline_tmax=0.0):
-    """
-    Return indices of all windows fully contained within [baseline_tmin, baseline_tmax].
-
-    For the current setup:
-    - epoch: [-1, 3]
-    - win_len: 0.5 s
-    - step: 0.05 s
-    this yields 11 baseline windows with starts from -1.00 to -0.50 s.
-    """
-    idx = []
-    for i, w in enumerate(windows):
-        if (w["start_sec"] >= baseline_tmin) and (w["stop_sec"] <= baseline_tmax):
-            idx.append(i)
-    return np.array(idx, dtype=int)
-
-
-def apply_baseline_correction(arr, baseline_idx, mode="subtract", eps=1e-12):
-    """
-    Baseline-correct a (n_windows, n_freqs) array.
-
-    Baseline is computed from arr[baseline_idx, :].
-    """
-    baseline = arr[baseline_idx, :]  # (n_baseline_windows, n_freqs)
-    mean_b = baseline.mean(axis=0, keepdims=True)
-    std_b = baseline.std(axis=0, keepdims=True, ddof=1)
-
-    if mode == "subtract":
-        out = arr - mean_b
-    elif mode == "ratio":
-        out = arr / (mean_b + eps)
-    elif mode == "percent":
-        out = 100.0 * (arr - mean_b) / (mean_b + eps)
-    elif mode == "zscore":
-        out = (arr - mean_b) / (std_b + eps)
-    elif mode == "logratio":
-        out = np.log10((arr + eps) / (mean_b + eps))
-    else:
-        raise ValueError(f"Unknown baseline mode: {mode}")
-
-    return out, mean_b.squeeze(), std_b.squeeze()
-
-
 def compute_connectivity_per_window(data_2ch, sfreq, windows, freqs, methods):
     """
     Compute FC for each window for the single left-right pair.
@@ -310,15 +251,13 @@ def compute_connectivity_per_window(data_2ch, sfreq, windows, freqs, methods):
     return results
 
 
-def save_results_npz(out_file, times, freqs, raw_results, bc_results, meta):
+def save_results_npz(out_file, times, freqs, raw_results, meta):
     np.savez(
         out_file,
         times=times,
         freqs=freqs,
         raw_coh=raw_results.get("coh"),
         raw_wpli=raw_results.get("wpli"),
-        bc_coh=bc_results.get("coh"),
-        bc_wpli=bc_results.get("wpli"),
         meta=meta,
     )
 
@@ -378,7 +317,8 @@ def main():
     raw = mne.io.read_raw_fif(raw_fname, preload=True, verbose=False)
 
     print("Cropping, loading, and resampling raw data...")
-    raw.crop(CROP_TMIN, CROP_TMAX).resample(RESAMPLE_SFREQ)
+    # raw.crop(CROP_TMIN, CROP_TMAX).resample(RESAMPLE_SFREQ)
+    raw.resample(RESAMPLE_SFREQ)
 
     print("Finding events...")
     events = mne.find_events(raw, stim_channel="STI 014", verbose=False)
@@ -393,7 +333,7 @@ def main():
         tmin=EPOCH_TMIN,
         tmax=EPOCH_TMAX,
         picks=picks,
-        baseline=None,   # IMPORTANT: no time-series baseline before FC estimation
+        baseline=(None, 0),
         preload=True,
         reject=None,
         verbose=False,
@@ -413,7 +353,7 @@ def main():
             epochs.info, verbose=AUTO_SELECT_VERBOSE
         )
 
-    print(f"\nUsing channels:")
+    print("\nUsing channels:")
     print(f"  Left  hemisphere proxy: {left_ch}")
     print(f"  Right hemisphere proxy: {right_ch}")
 
@@ -441,20 +381,6 @@ def main():
     print(f"First window: {windows[0]['start_sec']:.2f} to {windows[0]['stop_sec']:.2f} s")
     print(f"Last  window: {windows[-1]['start_sec']:.2f} to {windows[-1]['stop_sec']:.2f} s")
 
-    # Baseline windows: fully contained in [-1, 0]
-    baseline_idx = baseline_indices_from_windows(windows, baseline_tmin=-1.0, baseline_tmax=0.0)
-
-    print(f"\nBaseline window indices: {baseline_idx.tolist()}")
-    print(f"Number of baseline windows: {len(baseline_idx)}")
-    if len(baseline_idx) > 0:
-        b0 = windows[baseline_idx[0]]
-        b1 = windows[baseline_idx[-1]]
-        print(
-            "Baseline windows span starts from "
-            f"{b0['start_sec']:.2f} s to {b1['start_sec']:.2f} s "
-            f"(all fully contained in [-1, 0] s)"
-        )
-
     # -------------------------------------------------------------------------
     # Compute connectivity
     # -------------------------------------------------------------------------
@@ -468,21 +394,6 @@ def main():
     )
 
     # -------------------------------------------------------------------------
-    # Baseline correct connectivity
-    # -------------------------------------------------------------------------
-    bc_results = {}
-    baseline_stats = {}
-
-    for method in METHODS:
-        bc_arr, mean_b, std_b = apply_baseline_correction(
-            raw_results[method],
-            baseline_idx=baseline_idx,
-            mode=BASELINE_MODE,
-        )
-        bc_results[method] = bc_arr
-        baseline_stats[method] = dict(mean=mean_b, std=std_b)
-
-    # -------------------------------------------------------------------------
     # Save results
     # -------------------------------------------------------------------------
     meta = {
@@ -494,8 +405,6 @@ def main():
         "epoch_tmax": EPOCH_TMAX,
         "win_len_sec": WIN_LEN_SEC,
         "step_sec": STEP_SEC,
-        "baseline_mode": BASELINE_MODE,
-        "baseline_window_indices": baseline_idx.tolist(),
         "freqs_hz": FREQS.tolist(),
     }
 
@@ -504,13 +413,11 @@ def main():
         times=times,
         freqs=FREQS,
         raw_results=raw_results,
-        bc_results=bc_results,
         meta=meta,
     )
 
     for method in METHODS:
         save_csv_per_method(OUT_DIR, times, FREQS, raw_results[method], f"raw_{method}")
-        save_csv_per_method(OUT_DIR, times, FREQS, bc_results[method], f"baseline_corrected_{method}")
 
     # -------------------------------------------------------------------------
     # Plots
@@ -524,28 +431,12 @@ def main():
             out_file=OUT_DIR / f"raw_{method}_time_frequency.png",
         )
 
-        plot_time_frequency(
-            times,
-            FREQS,
-            bc_results[method],
-            title=f"Baseline-corrected {method} connectivity ({left_ch} ↔ {right_ch})",
-            out_file=OUT_DIR / f"baseline_corrected_{method}_time_frequency.png",
-        )
-
         plot_beta_average(
             times,
             raw_results[method],
             FREQS,
             title=f"Raw {method}",
             out_file=OUT_DIR / f"raw_{method}_beta_average.png",
-        )
-
-        plot_beta_average(
-            times,
-            bc_results[method],
-            FREQS,
-            title=f"Baseline-corrected {method}",
-            out_file=OUT_DIR / f"baseline_corrected_{method}_beta_average.png",
         )
 
     print("\nDone.")

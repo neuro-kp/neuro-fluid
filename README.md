@@ -32,6 +32,6 @@ Marimo notebooks live in `notebooks/`, with Python dependencies managed by [uv](
 ### Running the MEG connectivity notebook
 - `cd notebooks`
 - `uv sync` to create the virtual environment and install dependencies
-- `uv run marimo edit meg_connectivity.py` to open the notebook
+- `uv run marimo edit meg_connectivity_analysis_somato_dataset.py` to open the notebook
 
 On first run the MNE `somato` dataset (~610 MB) is downloaded to `~/mne_data` and cached for later runs.

@@ -8,16 +8,18 @@ app = marimo.App(width="medium")
 def _(mo):
     mo.md(
         r"""
-        # Interhemispheric beta-band functional connectivity (somato MEG)
+Interhemispheric beta-band functional connectivity on the MNE somato MEG dataset.
 
-        Sliding-window coherence and wPLI between one left and one right MEG gradiometer,
-        beta band 13-30 Hz, on the MNE `somato` dataset. Minimal marimo port of the
-        `meg_connectivity_analysis_somato_dataset.py` script: same configuration, helpers,
-        and outputs, with `main()` split into cells so the intermediates render inline.
+This script reproduces the logic of an EEG sliding-window FC analysis using:
+- 500 ms windows
+- 50 ms step size (90% overlap)
+- coherence and wPLI
+- beta band: 13-30 Hz (1-Hz steps)
 
-        For simplicity this uses ONE left- and ONE right-hemisphere gradiometer as rough
-        sensor-level proxies for left/right M1. Later this can be extended to ROI/cluster
-        averages or source-space M1 signals.
+For simplicity, this version uses ONE left-hemisphere and ONE right-hemisphere
+MEG gradiometer, intended as rough sensor-level proxies for left/right M1.
+
+Later, this can be extended to ROI/cluster averages or source-space M1 signals.
         """
     )
     return
@@ -39,6 +41,10 @@ def _():
 
 @app.cell
 def _(Path, np):
+    # =============================================================================
+    # Configuration
+    # =============================================================================
+
     # -------------------------
     # Dataset / epoch settings
     # -------------------------
@@ -112,10 +118,24 @@ def _(Path, np):
 
 @app.cell
 def _(FMAX, FMIN, mne, np, plt, spectral_connectivity_epochs):
+    # =============================================================================
+    # Utility functions
+    # =============================================================================
+
     def select_left_right_motor_like_grads(info, verbose=True):
         """
         Automatically select one left and one right MEG gradiometer as rough
         proxies for left/right sensorimotor cortex.
+
+        Heuristic:
+        - use grad channels only
+        - favor channels with:
+            * negative x (left) / positive x (right)
+            * y close to 0 (central AP position)
+            * high z (superior/top of helmet)
+            * moderate lateral x (not too medial, not too lateral)
+
+        This is only a pragmatic sensor-level approximation.
         """
         grad_picks = mne.pick_types(info, meg="grad", eeg=False, eog=False, stim=False)
         ch_names = [info["ch_names"][p] for p in grad_picks]
@@ -135,6 +155,10 @@ def _(FMAX, FMIN, mne, np, plt, spectral_connectivity_epochs):
         z_max = np.nanmax(z)
 
         # Score function: smaller is better
+        # Favor:
+        # - central AP (small |y|)
+        # - near x_target laterality
+        # - superior sensors (z close to z_max)
         def score(mask):
             idx = np.where(mask)[0]
             s = (
@@ -166,7 +190,19 @@ def _(FMAX, FMIN, mne, np, plt, spectral_connectivity_epochs):
         return data
 
     def make_sliding_windows(tmin, tmax, win_len, step, sfreq, n_times):
-        """Create overlapping windows as a list of dicts."""
+        """
+        Create overlapping windows.
+
+        Returns
+        -------
+        windows : list of dict
+            Each dict contains:
+            - 'start_sec'
+            - 'stop_sec'
+            - 'center_sec'
+            - 'start_samp'
+            - 'stop_samp'
+        """
         starts_sec = np.arange(tmin, tmax - win_len + 1e-12, step)
         windows = []
 
@@ -194,7 +230,22 @@ def _(FMAX, FMIN, mne, np, plt, spectral_connectivity_epochs):
         return windows
 
     def compute_connectivity_per_window(data_2ch, sfreq, windows, freqs, methods):
-        """Compute FC for each window for the single left-right pair."""
+        """
+        Compute FC for each window for the single left-right pair.
+
+        Parameters
+        ----------
+        data_2ch : ndarray, shape (n_epochs, 2, n_times)
+        sfreq : float
+        windows : list of dicts
+        freqs : ndarray
+        methods : list of str
+
+        Returns
+        -------
+        results : dict
+            results[method] -> array, shape (n_windows, n_freqs)
+        """
         results = {m: [] for m in methods}
         indices = (np.array([0]), np.array([1]))  # only L-R connection
 
@@ -215,6 +266,8 @@ def _(FMAX, FMIN, mne, np, plt, spectral_connectivity_epochs):
                     verbose=False,
                 )
 
+                # Expected data shape for one connection:
+                # (1, n_freqs) or possibly squeezed equivalent depending on version
                 cdat = np.asarray(con.get_data())
                 cdat = np.squeeze(cdat)
 
@@ -243,7 +296,10 @@ def _(FMAX, FMIN, mne, np, plt, spectral_connectivity_epochs):
         )
 
     def save_csv_per_method(out_dir, times, freqs, arr, prefix):
-        """Save one CSV file per method: first column = time, rest = frequencies."""
+        """
+        Save one CSV file per method in a simple tabular format:
+        first column = time, remaining columns = frequencies.
+        """
         header = "time_sec," + ",".join([f"{f:.1f}Hz" for f in freqs])
         csv_arr = np.column_stack([times, arr])
         np.savetxt(out_dir / f"{prefix}.csv", csv_arr, delimiter=",", header=header, comments="")
@@ -293,10 +349,16 @@ def _(FMAX, FMIN, mne, np, plt, spectral_connectivity_epochs):
 
 @app.cell
 def _(RESAMPLE_SFREQ, SUBJECT, TASK, mne, somato):
+    # =============================================================================
+    # Main
+    # =============================================================================
+    print("Loading somato dataset...")
     data_path = somato.data_path()
     raw_fname = data_path / f"sub-{SUBJECT}" / "meg" / f"sub-{SUBJECT}_task-{TASK}_meg.fif"
 
     raw = mne.io.read_raw_fif(raw_fname, preload=True, verbose=False)
+
+    print("Cropping, loading, and resampling raw data...")
     # raw.crop(CROP_TMIN, CROP_TMAX).resample(RESAMPLE_SFREQ)
     raw.resample(RESAMPLE_SFREQ)
     raw
@@ -305,9 +367,12 @@ def _(RESAMPLE_SFREQ, SUBJECT, TASK, mne, somato):
 
 @app.cell
 def _(EPOCH_TMAX, EPOCH_TMIN, EVENT_ID, mne, raw):
+    print("Finding events...")
     events = mne.find_events(raw, stim_channel="STI 014", verbose=False)
+
     picks = mne.pick_types(raw.info, meg="grad", eeg=False, eog=False, stim=False)
 
+    print("Constructing epochs...")
     epochs = mne.Epochs(
         raw,
         events,
@@ -320,6 +385,7 @@ def _(EPOCH_TMAX, EPOCH_TMIN, EVENT_ID, mne, raw):
         reject=None,
         verbose=False,
     )
+
     print(f"Number of epochs: {len(epochs)}")
     print(f"Epoch shape: {epochs.get_data().shape}")
     epochs
@@ -334,6 +400,9 @@ def _(
     epochs,
     select_left_right_motor_like_grads,
 ):
+    # -------------------------------------------------------------------------
+    # Select one left and one right channel
+    # -------------------------------------------------------------------------
     left_ch = LEFT_CH_NAME
     right_ch = RIGHT_CH_NAME
 
@@ -342,9 +411,9 @@ def _(
             epochs.info, verbose=AUTO_SELECT_VERBOSE
         )
 
-    print(f"Left  hemisphere proxy: {left_ch}")
-    print(f"Right hemisphere proxy: {right_ch}")
-    (left_ch, right_ch)
+    print("\nUsing channels:")
+    print(f"  Left  hemisphere proxy: {left_ch}")
+    print(f"  Right hemisphere proxy: {right_ch}")
     return left_ch, right_ch
 
 
@@ -365,6 +434,11 @@ def _(
     sfreq = epochs.info["sfreq"]
     n_epochs, n_ch, n_times = data_2ch.shape
 
+    print(f"\nTwo-channel data shape: {data_2ch.shape}")
+
+    # -------------------------------------------------------------------------
+    # Create sliding windows
+    # -------------------------------------------------------------------------
     windows = make_sliding_windows(
         tmin=EPOCH_TMIN,
         tmax=EPOCH_TMAX,
@@ -373,16 +447,21 @@ def _(
         sfreq=sfreq,
         n_times=n_times,
     )
+
     times = np.array([w["center_sec"] for w in windows])
 
-    print(f"Two-channel data shape: {data_2ch.shape}")
-    print(f"Number of sliding windows: {len(windows)}")
-    (data_2ch.shape, len(windows))
+    print(f"\nNumber of sliding windows: {len(windows)}")
+    print(f"First window: {windows[0]['start_sec']:.2f} to {windows[0]['stop_sec']:.2f} s")
+    print(f"Last  window: {windows[-1]['start_sec']:.2f} to {windows[-1]['stop_sec']:.2f} s")
     return data_2ch, sfreq, times, windows
 
 
 @app.cell
 def _(FREQS, METHODS, compute_connectivity_per_window, data_2ch, sfreq, windows):
+    # -------------------------------------------------------------------------
+    # Compute connectivity
+    # -------------------------------------------------------------------------
+    print("\nComputing sliding-window connectivity...")
     raw_results = compute_connectivity_per_window(
         data_2ch=data_2ch,
         sfreq=sfreq,
@@ -390,7 +469,6 @@ def _(FREQS, METHODS, compute_connectivity_per_window, data_2ch, sfreq, windows)
         freqs=FREQS,
         methods=METHODS,
     )
-    {m: raw_results[m].shape for m in raw_results}
     return (raw_results,)
 
 
@@ -412,6 +490,9 @@ def _(
     save_results_npz,
     times,
 ):
+    # -------------------------------------------------------------------------
+    # Save results
+    # -------------------------------------------------------------------------
     meta = {
         "subject": SUBJECT,
         "task": TASK,
@@ -432,34 +513,40 @@ def _(
         meta=meta,
     )
 
-    for _method in METHODS:
-        save_csv_per_method(OUT_DIR, times, FREQS, raw_results[_method], f"raw_{_method}")
-
-    print(f"Results saved in: {OUT_DIR.resolve()}")
+    for method in METHODS:
+        save_csv_per_method(OUT_DIR, times, FREQS, raw_results[method], f"raw_{method}")
     return
 
 
 @app.cell
-def _(FREQS, METHODS, OUT_DIR, left_ch, mo, plot_time_frequency, raw_results, right_ch, times):
-    mo.vstack(
-        [
+def _(
+    FREQS,
+    METHODS,
+    OUT_DIR,
+    left_ch,
+    mo,
+    plot_beta_average,
+    plot_time_frequency,
+    raw_results,
+    right_ch,
+    times,
+):
+    # -------------------------------------------------------------------------
+    # Plots
+    # -------------------------------------------------------------------------
+    _figs = []
+    for _method in METHODS:
+        _figs.append(
             plot_time_frequency(
                 times,
                 FREQS,
                 raw_results[_method],
-                title=f"Raw {_method} connectivity ({left_ch} - {right_ch})",
+                title=f"Raw {_method} connectivity ({left_ch} ↔ {right_ch})",
                 out_file=OUT_DIR / f"raw_{_method}_time_frequency.png",
             )
-            for _method in METHODS
-        ]
-    )
-    return
+        )
 
-
-@app.cell
-def _(FREQS, METHODS, OUT_DIR, mo, plot_beta_average, raw_results, times):
-    mo.vstack(
-        [
+        _figs.append(
             plot_beta_average(
                 times,
                 raw_results[_method],
@@ -467,9 +554,11 @@ def _(FREQS, METHODS, OUT_DIR, mo, plot_beta_average, raw_results, times):
                 title=f"Raw {_method}",
                 out_file=OUT_DIR / f"raw_{_method}_beta_average.png",
             )
-            for _method in METHODS
-        ]
-    )
+        )
+
+    print("\nDone.")
+    print(f"Results saved in: {OUT_DIR.resolve()}")
+    mo.vstack(_figs)
     return
 
 

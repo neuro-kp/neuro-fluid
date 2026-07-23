@@ -35,10 +35,11 @@ def _():
     import matplotlib.pyplot as plt
     import mne
 
+    from pathlib import Path
     from mne.datasets import somato
     from mne_connectivity import spectral_connectivity_epochs
 
-    return mne, mo, np, pd, plt, somato, spectral_connectivity_epochs
+    return Path, mne, mo, np, pd, plt, somato, spectral_connectivity_epochs
 
 
 @app.cell
@@ -452,6 +453,123 @@ def _(freqs, np, pd, raw_results, times):
         )
     tidy_df = pd.concat(_rows, ignore_index=True)
     tidy_df
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""
+    ## Saved outputs
+
+    The same artefacts as the original script (an NPZ, per-method CSVs, and PNG figures)
+    written to `somato_fc_results/` at the repo root. Saving is behind a button so opening
+    the notebook does not overwrite the committed results on every run. Unlike the script,
+    the CSV header uses the actual frequency bins, so it matches the data columns.
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    save_button = mo.ui.run_button(label="Save outputs to somato_fc_results/")
+    save_button
+    return (save_button,)
+
+
+@app.cell
+def _(
+    EPOCH_TMAX,
+    EPOCH_TMIN,
+    METHODS,
+    Path,
+    STEP_SEC,
+    SUBJECT,
+    TASK,
+    WIN_LEN_SEC,
+    freqs,
+    left_ch,
+    mo,
+    np,
+    plt,
+    raw_results,
+    right_ch,
+    save_button,
+    times,
+):
+    mo.stop(not save_button.value, mo.md("Press the button above to write the output files."))
+
+    _base = mo.notebook_dir()
+    _out_dir = (_base.parent if _base is not None else Path(".")) / "somato_fc_results"
+    _out_dir.mkdir(exist_ok=True, parents=True)
+
+    _meta = dict(
+        subject=SUBJECT,
+        task=TASK,
+        left_ch=left_ch,
+        right_ch=right_ch,
+        epoch_tmin=EPOCH_TMIN,
+        epoch_tmax=EPOCH_TMAX,
+        win_len_sec=WIN_LEN_SEC,
+        step_sec=STEP_SEC,
+        freqs_hz=freqs.tolist(),
+    )
+    np.savez(
+        _out_dir / "somato_interhemispheric_fc.npz",
+        times=times,
+        freqs=freqs,
+        raw_coh=raw_results.get("coh"),
+        raw_wpli=raw_results.get("wpli"),
+        meta=_meta,
+    )
+
+    _written = ["somato_interhemispheric_fc.npz"]
+    for _method in METHODS:
+        _arr = raw_results[_method]
+
+        _header = "time_sec," + ",".join(f"{f:.1f}Hz" for f in freqs)
+        np.savetxt(
+            _out_dir / f"raw_{_method}.csv",
+            np.column_stack([times, _arr]),
+            delimiter=",",
+            header=_header,
+            comments="",
+        )
+
+        _fig, _ax = plt.subplots(figsize=(10, 4))
+        _im = _ax.imshow(
+            _arr.T,
+            aspect="auto",
+            origin="lower",
+            extent=[times[0], times[-1], freqs[0], freqs[-1]],
+        )
+        _ax.axvline(0.0, color="w", linestyle="--", linewidth=1)
+        _ax.set_xlabel("Time (s)")
+        _ax.set_ylabel("Frequency (Hz)")
+        _ax.set_title(f"Raw {_method} connectivity ({left_ch} - {right_ch})")
+        _cbar = plt.colorbar(_im, ax=_ax)
+        _cbar.set_label("Connectivity")
+        _fig.tight_layout()
+        _fig.savefig(_out_dir / f"raw_{_method}_time_frequency.png", dpi=150)
+        plt.close(_fig)
+
+        _mean = _arr.mean(axis=1)
+        _fig2, _ax2 = plt.subplots(figsize=(10, 4))
+        _ax2.plot(times, _mean, linewidth=2)
+        _ax2.axvline(0.0, color="k", linestyle="--", linewidth=1)
+        _ax2.set_xlabel("Time (s)")
+        _ax2.set_ylabel("Mean beta connectivity")
+        _ax2.set_title(f"Raw {_method} ({freqs[0]:.0f}-{freqs[-1]:.0f} Hz avg)")
+        _fig2.tight_layout()
+        _fig2.savefig(_out_dir / f"raw_{_method}_beta_average.png", dpi=150)
+        plt.close(_fig2)
+
+        _written += [
+            f"raw_{_method}.csv",
+            f"raw_{_method}_time_frequency.png",
+            f"raw_{_method}_beta_average.png",
+        ]
+
+    mo.md(f"Wrote to `{_out_dir}`:\n\n- " + "\n- ".join(_written))
     return
 
 

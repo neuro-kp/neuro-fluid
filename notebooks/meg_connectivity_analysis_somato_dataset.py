@@ -6,22 +6,20 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _(mo):
-    mo.md(
-        r"""
-Interhemispheric beta-band functional connectivity on the MNE somato MEG dataset.
+    mo.md(r"""
+    Interhemispheric beta-band functional connectivity on the MNE somato MEG dataset.
 
-This script reproduces the logic of an EEG sliding-window FC analysis using:
-- 500 ms windows
-- 50 ms step size (90% overlap)
-- coherence and wPLI
-- beta band: 13-30 Hz (1-Hz steps)
+    This script reproduces the logic of an EEG sliding-window FC analysis using:
+    - 500 ms windows
+    - 50 ms step size (90% overlap)
+    - coherence and wPLI
+    - beta band: 13-30 Hz (1-Hz steps)
 
-For simplicity, this version uses ONE left-hemisphere and ONE right-hemisphere
-MEG gradiometer, intended as rough sensor-level proxies for left/right M1.
+    For simplicity, this version uses ONE left-hemisphere and ONE right-hemisphere
+    MEG gradiometer, intended as rough sensor-level proxies for left/right M1.
 
-Later, this can be extended to ROI/cluster averages or source-space M1 signals.
-        """
-    )
+    Later, this can be extended to ROI/cluster averages or source-space M1 signals.
+    """)
     return
 
 
@@ -29,6 +27,7 @@ Later, this can be extended to ROI/cluster averages or source-space M1 signals.
 def _():
     import marimo as mo
     import numpy as np
+    import pandas as pd
     import matplotlib.pyplot as plt
     import mne
 
@@ -36,7 +35,7 @@ def _():
     from mne.datasets import somato
     from mne_connectivity import spectral_connectivity_epochs
 
-    return Path, mne, mo, np, plt, somato, spectral_connectivity_epochs
+    return Path, mne, mo, np, pd, plt, somato, spectral_connectivity_epochs
 
 
 @app.cell
@@ -389,7 +388,22 @@ def _(EPOCH_TMAX, EPOCH_TMIN, EVENT_ID, mne, raw):
     print(f"Number of epochs: {len(epochs)}")
     print(f"Epoch shape: {epochs.get_data().shape}")
     epochs
-    return (epochs,)
+    return epochs, events
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""
+    ## Intermediate views
+    """)
+    return
+
+
+@app.cell
+def _(events, pd):
+    events_df = pd.DataFrame(events, columns=["sample", "prev_id", "event_id"])
+    events_df
+    return
 
 
 @app.cell
@@ -414,7 +428,29 @@ def _(
     print("\nUsing channels:")
     print(f"  Left  hemisphere proxy: {left_ch}")
     print(f"  Right hemisphere proxy: {right_ch}")
+    (left_ch, right_ch)
     return left_ch, right_ch
+
+
+@app.cell
+def _(epochs, left_ch, mne, np, plt, right_ch):
+    _picks = mne.pick_types(epochs.info, meg="grad", eeg=False, eog=False, stim=False)
+    _names = [epochs.info["ch_names"][p] for p in _picks]
+    _pos = np.array([epochs.info["chs"][p]["loc"][:2] for p in _picks])
+
+    _fig, _ax = plt.subplots(figsize=(5, 5))
+    _ax.scatter(_pos[:, 0], _pos[:, 1], s=12, c="lightgrey", label="grad sensors")
+    for _ch, _colour in [(left_ch, "tab:blue"), (right_ch, "tab:red")]:
+        _i = _names.index(_ch)
+        _ax.scatter(_pos[_i, 0], _pos[_i, 1], s=80, c=_colour, label=_ch)
+        _ax.annotate(_ch, _pos[_i], textcoords="offset points", xytext=(6, 6))
+    _ax.set_xlabel("x (left to right)")
+    _ax.set_ylabel("y (posterior to anterior)")
+    _ax.set_title("Selected left/right sensors")
+    _ax.set_aspect("equal")
+    _ax.legend(loc="lower right", fontsize=8)
+    _fig
+    return
 
 
 @app.cell
@@ -457,7 +493,37 @@ def _(
 
 
 @app.cell
-def _(FREQS, METHODS, compute_connectivity_per_window, data_2ch, sfreq, windows):
+def _(pd, windows):
+    windows_df = pd.DataFrame(windows)
+    windows_df
+    return
+
+
+@app.cell
+def _(data_2ch, epochs, left_ch, plt, right_ch):
+    _t = epochs.times
+    _avg = data_2ch.mean(axis=0)
+    _fig, _ax = plt.subplots(figsize=(10, 4))
+    _ax.plot(_t, _avg[0], label=f"left ({left_ch})", color="tab:blue")
+    _ax.plot(_t, _avg[1], label=f"right ({right_ch})", color="tab:red")
+    _ax.axvline(0.0, color="k", linestyle="--", linewidth=1)
+    _ax.set_xlabel("Time (s)")
+    _ax.set_ylabel("Evoked amplitude (T/m)")
+    _ax.set_title("Trial-averaged signal for the two selected channels")
+    _ax.legend()
+    _fig
+    return
+
+
+@app.cell
+def _(
+    FREQS,
+    METHODS,
+    compute_connectivity_per_window,
+    data_2ch,
+    sfreq,
+    windows,
+):
     # -------------------------------------------------------------------------
     # Compute connectivity
     # -------------------------------------------------------------------------
@@ -469,7 +535,37 @@ def _(FREQS, METHODS, compute_connectivity_per_window, data_2ch, sfreq, windows)
         freqs=FREQS,
         methods=METHODS,
     )
+    {m: raw_results[m].shape for m in raw_results}
     return (raw_results,)
+
+
+@app.cell
+def _(FMAX, FMIN, np, sfreq, windows):
+    _n = windows[0]["stop_samp"] - windows[0]["start_samp"]
+    _all = np.fft.rfftfreq(_n, d=1.0 / sfreq)
+    freqs_actual = _all[(_all >= FMIN) & (_all <= FMAX)]
+    freqs_actual
+    return (freqs_actual,)
+
+
+@app.cell
+def _(freqs_actual, np, pd, raw_results, times):
+    _rows = []
+    for _method, _arr in raw_results.items():
+        _tt, _ff = np.meshgrid(times, freqs_actual, indexing="ij")
+        _rows.append(
+            pd.DataFrame(
+                {
+                    "method": _method,
+                    "time_sec": _tt.ravel(),
+                    "freq_hz": _ff.ravel(),
+                    "connectivity": _arr.ravel(),
+                }
+            )
+        )
+    tidy_df = pd.concat(_rows, ignore_index=True)
+    tidy_df
+    return
 
 
 @app.cell
@@ -559,6 +655,63 @@ def _(
     print("\nDone.")
     print(f"Results saved in: {OUT_DIR.resolve()}")
     mo.vstack(_figs)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""
+    ## Interactive views
+    """)
+    return
+
+
+@app.cell
+def _(METHODS, freqs_actual, mo):
+    method_selector = mo.ui.dropdown(options=METHODS, value=METHODS[0], label="Method")
+    band = mo.ui.range_slider(
+        start=int(freqs_actual[0]),
+        stop=int(freqs_actual[-1]),
+        value=[int(freqs_actual[0]), int(freqs_actual[-1])],
+        step=1,
+        label="Averaging band (Hz)",
+    )
+    mo.hstack([method_selector, band], justify="start", gap=2)
+    return band, method_selector
+
+
+@app.cell
+def _(freqs_actual, method_selector, plt, raw_results, times):
+    _arr = raw_results[method_selector.value]
+    _fig, _ax = plt.subplots(figsize=(10, 4))
+    _im = _ax.imshow(
+        _arr.T,
+        aspect="auto",
+        origin="lower",
+        extent=[times[0], times[-1], freqs_actual[0], freqs_actual[-1]],
+    )
+    _ax.axvline(0.0, color="w", linestyle="--", linewidth=1)
+    _ax.set_xlabel("Time (s)")
+    _ax.set_ylabel("Frequency (Hz)")
+    _ax.set_title(f"{method_selector.value} connectivity")
+    _cbar = plt.colorbar(_im, ax=_ax)
+    _cbar.set_label("Connectivity")
+    _fig
+    return
+
+
+@app.cell
+def _(band, freqs_actual, method_selector, plt, raw_results, times):
+    _lo, _hi = band.value
+    _mask = (freqs_actual >= _lo) & (freqs_actual <= _hi)
+    _mean = raw_results[method_selector.value][:, _mask].mean(axis=1)
+    _fig, _ax = plt.subplots(figsize=(10, 4))
+    _ax.plot(times, _mean, linewidth=2, color="tab:purple")
+    _ax.axvline(0.0, color="k", linestyle="--", linewidth=1)
+    _ax.set_xlabel("Time (s)")
+    _ax.set_ylabel("Mean connectivity")
+    _ax.set_title(f"{method_selector.value}, {_lo:.0f}-{_hi:.0f} Hz ({int(_mask.sum())} bins)")
+    _fig
     return
 
 

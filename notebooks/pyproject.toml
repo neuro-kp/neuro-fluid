@@ -1,0 +1,13 @@
+[project]
+name = "neuro-fluid-notebooks"
+version = "0.1.0"
+description = "Marimo notebooks for the neuro-fluid MEG/EEG connectivity analyses"
+requires-python = ">=3.11"
+dependencies = [
+    "marimo>=0.9",
+    "mne>=1.7",
+    "mne-connectivity>=0.7",
+    "numpy>=1.26",
+    "matplotlib>=3.8",
+    "pandas>=2.2",
+]

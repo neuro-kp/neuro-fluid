@@ -33,8 +33,8 @@ def _():
 
     from pathlib import Path
     from mne.datasets import somato
-    from mne_connectivity import spectral_connectivity_epochs
-
+    # from mne_connectivity import spectral_connectivity_epochs
+    from transparent_spectral_connectivity import spectral_connectivity_epochs
     return Path, mne, mo, np, pd, plt, somato, spectral_connectivity_epochs
 
 
